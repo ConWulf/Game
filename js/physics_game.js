@@ -6,14 +6,14 @@
     const  ctx = background.getContext("2d");
     background.width = width;
     background.height = height;
-    //position, velocity, and time variables
     const dt = 5;
+    //ball object
     let ball= {
         r: 15,
         x: width / 2,
         y: height / 2,
-        velX: .12,
-        velY: .12,
+        velX: .2,
+        velY: .2,
     }
     let padWidth = 10;
     let padHeight = 60;
@@ -30,7 +30,6 @@ function drawBall(xPos, yPos, radius){
     ctx.fill();
 }
 
-//function to move circle to new position
     // position = initial position + (v * dt)
 function circlePosition() {
         ball.x += (ball.velX * dt);
@@ -38,17 +37,23 @@ function circlePosition() {
 }
 
 //animate circle
-function frame() {
+function ballFrame() {
     circlePosition();
     checkEdgeBounce();
+    drawBall(ball.x, ball.y, ball.r);
+}
+
+function paddleFrame() {
     paddleBounce();
     checkEdge();
-    clearCanvas();
-    drawBall(ball.x, ball.y, ball.r);
     drawPaddle(paddle1X, paddle1Y, padWidth, padHeight);
 }
 
-    setInterval(frame, dt);
+function frame() {
+    clearCanvas();
+    ballFrame();
+    paddleFrame();
+}
 
 function clearCanvas() {
     ctx.clearRect(0, 0, width, height);
@@ -104,5 +109,6 @@ window.addEventListener("mousemove", function (e) {
     frame();
     paddlePosition();
 })
+    setInterval(frame, dt);
 
 })();
