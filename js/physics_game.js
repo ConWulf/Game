@@ -7,14 +7,19 @@
     background.width = width;
     background.height = height;
     //position, velocity, and time variables
-    const dt = 10;
-    let r = 15;
-    let x = width / 2;
-    let y = height / 2;
-    let velX = .07;
-    let velY = .07;
-    // let lineX = 0
-    // let lineY = 550
+    const dt = 5;
+    let ball= {
+        r: 15,
+        x: width / 2,
+        y: height / 2,
+        velX: .12,
+        velY: .12,
+    }
+    let padWidth = 10;
+    let padHeight = 60;
+    let paddle1Y = (height/2) - (padHeight / 2);
+    let paddle1X = 2;
+    let paddleVel = .39;
 
 //function to draw the circle
 function drawBall(xPos, yPos, radius){
@@ -24,68 +29,80 @@ function drawBall(xPos, yPos, radius){
     ctx.stroke();
     ctx.fill();
 }
+
 //function to move circle to new position
     // position = initial position + (v * dt)
 function circlePosition() {
-        x += (velX * dt);
-        y += (velY * dt);
+        ball.x += (ball.velX * dt);
+        ball.y += (ball.velY * dt);
 }
 
 //animate circle
-function moveCircle() {
+function frame() {
     circlePosition();
     checkEdgeBounce();
+    paddleBounce();
+    checkEdge();
     clearCanvas();
-    drawBall(x, y, r);
-    line();
+    drawBall(ball.x, ball.y, ball.r);
+    drawPaddle(paddle1X, paddle1Y, padWidth, padHeight);
 }
-    // setInterval(moveCircle, dt);
+
+    setInterval(frame, dt);
 
 function clearCanvas() {
     ctx.clearRect(0, 0, width, height);
 }
-moveCircle();
-// moveCircle();
-//if edge of circle meets edge of screen, Velocity = -Velocity
-    //flip velocities when ball gets to the edge of the canvas
-    // function checkEdgeBounce() {
-    //     if (x position === width - r) {
-    //         velX = -velX;
-    //     } else if (y position === height - r) {
-    //         velY = -velY;
-    //     }
-    // }
-
-    // TODO: figure out why the ball bounces one diameter above lower bound
 
     function checkEdgeBounce() {
-        //check bottom of window(-y)
-        if (y + (velY * y) <= r || y + (velY * y) >= height - r) {
-            velY = -velY;
+        //check top and bottom of window
+        if (ball.y <= ball.r || ball.y >= height - ball.r) {
+            ball.velY = -ball.velY;
             clearCanvas();
-            drawBall(x, y, r);
+            drawBall(ball.x, ball.y, ball.r);
         }
-        if (x + (velX * dt) <= r || x + (velX * dt) >= width - r) {
-            velX = -velX;
+        //check left and right
+        if (ball.x <= ball.r || ball.x >= width - ball.r) {
+            ball.velX = -ball.velX;
             clearCanvas();
-            drawBall(x, y, r);
+            drawBall(ball.x, ball.y, ball.r);
         }
     }
 
-    function line() {
+//if ball X position of ball <= X position of the edge of the paddle + r, bounce;
+    function paddleBounce() {
+    //need to remove height above and below paddle.
+     if ((ball.x <= padWidth + ball.r)) {
+        ball.velX = -ball.velX;
+    }
+    }
+
+    function drawPaddle(xPos, yPos, width, height) {
         ctx.beginPath();
-        ctx.moveTo(x ,y);
-        ctx.lineTo(x + r, y + r);
-        ctx.lineWidth = 2;
-        ctx.fillStyle = "#000";
+        ctx.rect(xPos, yPos, width, height);
+        ctx.fillStyle = "#fff";
         ctx.stroke();
+        ctx.fill();
+
     }
-// moveCircle();
 
+    function paddlePosition() {
+        paddle1Y += paddleVel;
+    }
 
-// window.addEventListener("mousemove", function (e) {
-//     x = e.pageX;
-//     y = e.pageY;
-//     moveCircle();
-// })
+    function checkEdge() {
+        if (paddle1Y <= 0) {
+            paddleVel = -paddleVel
+        }
+        if (paddle1Y >= height - padHeight) {
+            paddleVel = -paddleVel;
+        }
+    }
+
+window.addEventListener("mousemove", function (e) {
+    paddle1Y = e.pageY;
+    frame();
+    paddlePosition();
+})
+
 })();
