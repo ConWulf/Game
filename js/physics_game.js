@@ -6,22 +6,28 @@
     const  ctx = background.getContext("2d");
     background.width = width;
     background.height = height;
-    const dt = 5;
-    const  paddleTime = 10;
+    const dt = 1;
+    const  paddleTime = 5;
     //ball object
     let ball= {
         r: 15,
         x: width / 2,
         y: height / 2,
-        velX: .1,
-        velY: .2,
+        velX: .9,
+        velY: .9,
     };
      let paddleOne = {
-     width: 13,
-     height: 85,
-     x: 2,
-     upVel: 0,
-     downVel: 0,
+        width: 13,
+         height: 85,
+         x: 2,
+         upVel: 0,
+         downVel: 0,
+         topEdgeCheck: function () {
+             return paddleOne.y >= 10
+        },
+         bottomEdge: function () {
+            return paddleOne.y <= height - (paddleOne.height + 10)
+         }
     }
     paddleOne.y = (height/2) - (paddleOne.height/2);
 //function to draw the circle
@@ -90,14 +96,13 @@ function clearCanvas() {
     }
 
 window.addEventListener("keydown", function (e) {
-        if (e.code === "KeyS" && paddleOne.y <= height - (paddleOne.height + 10)) {
-            paddleOne.downVel = 1;
+        if (e.code === "KeyS" && paddleOne.bottomEdge()) {
+            paddleOne.downVel = 5;
             paddleOne.y += (paddleOne.downVel * paddleTime);
-        } else if (e.code === "KeyW" && paddleOne.y >= 10) {
-            paddleOne.upVel = 1;
+        } else if (e.code === "KeyW" && paddleOne.topEdgeCheck()) {
+            paddleOne.upVel = 5;
             paddleOne.y -= (paddleOne.upVel * paddleTime);
         }
 })
     setInterval(frame, dt);
-//test
 })();
