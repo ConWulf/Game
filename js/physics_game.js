@@ -8,13 +8,12 @@
     background.height = height;
     const dt = 1;
     const  paddleTime = 5;
-    //ball object
     let ball= {
-        r: 15,
+        r: 10,
         x: width / 2,
         y: height / 2,
-        velX: .8,
-        velY: .5,
+        velX: .9,
+        velY: .9,
     };
      let paddleOne = {
         width: 13,
@@ -23,10 +22,10 @@
          upVel: 0,
          downVel: 0,
          topEdgeCheck: function () {
-             return paddleOne.y >= 6;
+             return paddleOne.y <= 6;
         },
          bottomEdge: function () {
-            return paddleOne.y <= height - (paddleOne.height + 6);
+            return paddleOne.y >= height - (paddleOne.height);
          }
     };
     let paddleTwo = {
@@ -35,24 +34,32 @@
         upVel: 0,
         downVel: 0,
         topEdgeCheck: function () {
-            return paddleTwo.y >= 6;
+            return paddleTwo.y <= 6;
         },
         bottomEdge: function () {
-            return paddleTwo.y <= height - (paddleOne.height + 6);
+            return paddleTwo.y >= height - (paddleOne.height );
         }
     }
-    let playerOne = Number(document.getElementById("P1score").innerHTML);
-    let playerTwo = Number(document.getElementById("P2score").innerHTML)
+    let playerOne = parseInt(document.getElementById("P1score").innerHTML);
+    let playerTwo = parseInt(document.getElementById("P2score").innerHTML)
     paddleOne.y = (height/2) - (paddleOne.height/2);
     paddleTwo.y = (height/2) - (paddleTwo.height/2);
     paddleTwo.x = (width) - (paddleTwo.width + 2);
 
-    function score() {
+    function random(min, max) {
+        return Math.floor(Math.random() * (max - min) + min)
+    }
+
+    function p1Score() {
         if (ball.x <  ball.r) {
             playerOne += 1;
             document.getElementById("P1score").innerHTML = playerOne;
             return playerOne;
-        } else if (ball.x > width - ball.r) {
+        }
+    }
+
+    function p2Score() {
+        if (ball.x > width - ball.r) {
             playerTwo += 1
             document.getElementById("P2score").innerHTML = playerTwo;
         }
@@ -73,13 +80,15 @@ function circlePosition() {
 
 function ballFrame() {
     circlePosition();
-    checkEdgeBounce();
     paddleBounce();
+    checkEdgeBounce();
     drawBall(ball.x, ball.y, ball.r);
 }
 
 function paddleFrame() {
     movePaddle();
+    leftPaddleCheck();
+    rightPaddleCheck();
     drawPaddle(paddleOne.x, paddleOne.y, paddleOne.width, paddleOne.height);
     drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
 }
@@ -88,29 +97,44 @@ function frame() {
     clearCanvas();
     ballFrame();
     paddleFrame();
-    score();
-    clearInterval();
+    p1Score();
+    p2Score();
+    reset();
 }
 
 function clearCanvas() {
     ctx.clearRect(0, 0, width, height);
 }
 
+function reset() {
+ if (ball.x <= ball.r || ball.x  >= (width - ball.r)) {
+        ball.x = width/2;
+        ball.y = height/2;
+     if (random(0, 4) === 0) {
+         ball.velX = -ball.velX;
+     } else if (random(0, 4 === 1)) {
+         ball.velY = -ball.velY;
+     } else if (random(0, 4) === 2){
+         ball.velX = -ball.velX;
+         ball.velY = -ball.velX;
+     }
+    }
+
+}
+
     function checkEdgeBounce() {
-        //check top and bottom of window
         if (ball.y <= ball.r || ball.y >= height - ball.r) {
             ball.velY = -ball.velY;
         }
     }
 
-    // TODO: get ball to bounce off paddle
-//if ball X position of ball <= X position of the edge of the paddle + r, bounce;
-    //height of canvas - height of paddle = area to bounce off
     function paddleBounce() {
-    if (ball.x  <= (paddleOne.height - height)) {
-        ball.velX = -ball.velX;
-    }
-
+        if ((ball.x <= paddleOne.x + paddleOne.width + ball.r) && (ball.y >= paddleOne.y) && (ball.y <= paddleOne.y + paddleOne.height)) {
+            ball.velX = -ball.velX;
+        }
+        if ((ball.x >= paddleTwo.x - paddleTwo.width + 1) && (ball.y >= paddleTwo.y) && (ball.y <= paddleTwo.y + paddleTwo.height)) {
+            ball.velX = -ball.velX;
+        }
     }
 
     function movePaddle() {
@@ -129,12 +153,20 @@ function clearCanvas() {
 
     }
 
-    function paddleStop() {
-    if (paddleOne.bottomEdge()) {
-        paddleOne.downVel = 0;
-    } else if (paddleOne.topEdgeCheck()) {
-        paddleOne.upVel = 0
+    function leftPaddleCheck () {
+        if (paddleOne.bottomEdge()) {
+            paddleOne.downVel = 0;
+        } else if (paddleOne.topEdgeCheck()) {
+            paddleOne.upVel = 0
+        }
     }
+
+    function rightPaddleCheck () {
+        if (paddleTwo.bottomEdge()) {
+            paddleTwo.downVel = 0;
+        } else if (paddleTwo.topEdgeCheck()) {
+            paddleTwo.upVel = 0
+        }
     }
 
     window.addEventListener("keydown", e => {
@@ -155,6 +187,8 @@ function clearCanvas() {
                 paddleTwo.upVel = .5;
                 drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
         }
+        leftPaddleCheck();
+        rightPaddleCheck();
         window.addEventListener("keyup", e => {
             switch (e.code) {
                 case "KeyS":
@@ -171,14 +205,5 @@ function clearCanvas() {
             }
         })
     })
-    function game() {
-        var animate = setInterval(frame, dt);
-        if (ball.x > width - ball.r) {
-            document.location.reload();
-           clearInterval(animate);
-        }
-    }
-    game();
-
-
+        setInterval(frame, dt);
 })();

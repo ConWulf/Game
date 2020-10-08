@@ -1,12 +1,27 @@
+
 #background {
     background: olive;
-    width: 80%;
-    height: 80%;
+    border: 4px solid #005599;
+    width: 90%;
+    height: 50vh;
 }
 
-#P2 {
-    display: flex;
-    border: 10px solid black;
+.scoreboard #P2  {
+    padding: 10px;
+    display: inline-block;
+    border: 5px solid black;
     background-color: #aa0055;
+    font-family: 'Press Start 2P', cursive;
+    float: right;
+
+}
+
+.scoreboard #P1  {
+    padding: 10px;
+    display: inline-block;
+    border: 5px solid black;
+    background-color: #aa0055;
+    font-family: 'Press Start 2P', cursive;
+    float: left;
 
 }
