@@ -3,3 +3,10 @@
     width: 80%;
     height: 80%;
 }
+
+#P2 {
+    display: flex;
+    border: 10px solid black;
+    background-color: #aa0055;
+
+}
