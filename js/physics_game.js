@@ -1,6 +1,6 @@
 (function () {
     "use strict"
-    const width = window.innerWidth;
+    const width = window.innerWidth ;
     const height = window.innerHeight;
     const background = document.getElementById("background");
     const  ctx = background.getContext("2d");
@@ -9,11 +9,11 @@
     const dt = 1;
     const  paddleTime = 5;
     let ball= {
-        r: 10,
+        r: 5,
         x: width / 2,
         y: height / 2,
-        velX: .9,
-        velY: .9,
+        velX: .6,
+        velY: .6,
     };
      let paddleOne = {
         width: 13,
@@ -22,10 +22,10 @@
          upVel: 0,
          downVel: 0,
          topEdgeCheck: function () {
-             return paddleOne.y <= 6;
+             return this.y <= 6;
         },
          bottomEdge: function () {
-            return paddleOne.y >= height - (paddleOne.height);
+            return this.y >= height - (this.height);
          }
     };
     let paddleTwo = {
@@ -34,27 +34,28 @@
         upVel: 0,
         downVel: 0,
         topEdgeCheck: function () {
-            return paddleTwo.y <= 6;
+            return this.y <= 6;
         },
         bottomEdge: function () {
-            return paddleTwo.y >= height - (paddleOne.height );
+            return this.y >= height - (this.height );
         }
     }
-    let playerOne = parseInt(document.getElementById("P1score").innerHTML);
-    let playerTwo = parseInt(document.getElementById("P2score").innerHTML)
     paddleOne.y = (height/2) - (paddleOne.height/2);
     paddleTwo.y = (height/2) - (paddleTwo.height/2);
     paddleTwo.x = (width) - (paddleTwo.width + 2);
+    let playerOne = parseInt(document.getElementById("P1score").innerHTML);
+    let playerTwo = parseInt(document.getElementById("P2score").innerHTML)
+
 
     function random(min, max) {
         return Math.floor(Math.random() * (max - min) + min)
     }
 
+
     function p1Score() {
         if (ball.x <  ball.r) {
             playerOne += 1;
             document.getElementById("P1score").innerHTML = playerOne;
-            return playerOne;
         }
     }
 
@@ -107,7 +108,7 @@ function clearCanvas() {
 }
 
 function reset() {
- if (ball.x <= ball.r || ball.x  >= (width - ball.r)) {
+ if (ball.x <= ball.r  || ball.x  >= (width - ball.r)) {
         ball.x = width/2;
         ball.y = height/2;
      if (random(0, 4) === 0) {
@@ -129,7 +130,7 @@ function reset() {
     }
 
     function paddleBounce() {
-        if ((ball.x <= paddleOne.x + paddleOne.width + ball.r) && (ball.y >= paddleOne.y) && (ball.y <= paddleOne.y + paddleOne.height)) {
+        if ((ball.x  <= paddleOne.x + paddleOne.width + ball.r) && (ball.y >= paddleOne.y) && (ball.y  <= paddleOne.y + paddleOne.height)) {
             ball.velX = -ball.velX;
         }
         if ((ball.x >= paddleTwo.x - paddleTwo.width + 1) && (ball.y >= paddleTwo.y) && (ball.y <= paddleTwo.y + paddleTwo.height)) {
@@ -205,5 +206,14 @@ function reset() {
             }
         })
     })
-        setInterval(frame, dt);
+        // setInterval(frame, dt);
+
+    window.addEventListener("mousemove", e => {
+        ball.x = e.pageX;
+        ball.y = e.pageY;
+        clearCanvas();
+        drawBall(ball.x, ball.y, ball.r);
+        drawPaddle(paddleOne.x, paddleOne.y, paddleOne.width, paddleOne.height);
+        drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
+    });
 })();

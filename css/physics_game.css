@@ -3,7 +3,7 @@
     background: olive;
     border: 4px solid #005599;
     width: 90%;
-    height: 50vh;
+    height: 90%;
 }
 
 .scoreboard #P2  {
@@ -22,6 +22,5 @@
     border: 5px solid black;
     background-color: #aa0055;
     font-family: 'Press Start 2P', cursive;
-    float: left;
 
 }
