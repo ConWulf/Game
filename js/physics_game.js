@@ -55,14 +55,14 @@
     function p1Score() {
         if (ball.x <  ball.r) {
             playerOne += 1;
-            document.getElementById("P1score").innerHTML = playerOne;
+            document.getElementById("P2score").innerHTML = playerOne;
         }
     }
 
     function p2Score() {
         if (ball.x > width - ball.r) {
             playerTwo += 1
-            document.getElementById("P2score").innerHTML = playerTwo;
+            document.getElementById("P1score").innerHTML = playerTwo;
         }
     }
 
@@ -206,14 +206,14 @@ function reset() {
             }
         })
     })
-        // setInterval(frame, dt);
+        setInterval(frame, dt);
 
-    window.addEventListener("mousemove", e => {
-        ball.x = e.pageX;
-        ball.y = e.pageY;
-        clearCanvas();
-        drawBall(ball.x, ball.y, ball.r);
-        drawPaddle(paddleOne.x, paddleOne.y, paddleOne.width, paddleOne.height);
-        drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
-    });
+    // window.addEventListener("mousemove", e => {
+    //     ball.x = e.pageX;
+    //     ball.y = e.pageY;
+    //     clearCanvas();
+    //     drawBall(ball.x, ball.y, ball.r);
+    //     drawPaddle(paddleOne.x, paddleOne.y, paddleOne.width, paddleOne.height);
+    //     drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
+    // });
 })();
