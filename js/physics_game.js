@@ -9,12 +9,13 @@
     const dt = 1;
     const  paddleTime = 5;
     let ball= {
-        r: 5,
+        r: 8,
         x: width / 2,
         y: height / 2,
-        velX: .6,
-        velY: .6,
+        velX: .4,
+        velY: .4,
     };
+
      let paddleOne = {
         width: 13,
          height: 85,
@@ -28,6 +29,7 @@
             return this.y >= height - (this.height);
          }
     };
+
     let paddleTwo = {
         width: 13,
         height: 85,
@@ -43,27 +45,15 @@
     paddleOne.y = (height/2) - (paddleOne.height/2);
     paddleTwo.y = (height/2) - (paddleTwo.height/2);
     paddleTwo.x = (width) - (paddleTwo.width + 2);
+
     let playerOne = parseInt(document.getElementById("P1score").innerHTML);
     let playerTwo = parseInt(document.getElementById("P2score").innerHTML)
-
+    let  red;
+    let green;
+    let blue;
 
     function random(min, max) {
         return Math.floor(Math.random() * (max - min) + min)
-    }
-
-
-    function p1Score() {
-        if (ball.x <  ball.r) {
-            playerOne += 1;
-            document.getElementById("P2score").innerHTML = playerOne;
-        }
-    }
-
-    function p2Score() {
-        if (ball.x > width - ball.r) {
-            playerTwo += 1
-            document.getElementById("P1score").innerHTML = playerTwo;
-        }
     }
 
 function drawBall(xPos, yPos, radius){
@@ -74,53 +64,9 @@ function drawBall(xPos, yPos, radius){
     ctx.fill();
 }
 
-function circlePosition() {
+function ballPosition() {
         ball.x += (ball.velX * dt);
         ball.y += (ball.velY * dt);
-}
-
-function ballFrame() {
-    circlePosition();
-    paddleBounce();
-    checkEdgeBounce();
-    drawBall(ball.x, ball.y, ball.r);
-}
-
-function paddleFrame() {
-    movePaddle();
-    leftPaddleCheck();
-    rightPaddleCheck();
-    drawPaddle(paddleOne.x, paddleOne.y, paddleOne.width, paddleOne.height);
-    drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
-}
-
-function frame() {
-    clearCanvas();
-    ballFrame();
-    paddleFrame();
-    p1Score();
-    p2Score();
-    reset();
-}
-
-function clearCanvas() {
-    ctx.clearRect(0, 0, width, height);
-}
-
-function reset() {
- if (ball.x <= ball.r  || ball.x  >= (width - ball.r)) {
-        ball.x = width/2;
-        ball.y = height/2;
-     if (random(0, 4) === 0) {
-         ball.velX = -ball.velX;
-     } else if (random(0, 4 === 1)) {
-         ball.velY = -ball.velY;
-     } else if (random(0, 4) === 2){
-         ball.velX = -ball.velX;
-         ball.velY = -ball.velX;
-     }
-    }
-
 }
 
     function checkEdgeBounce() {
@@ -129,20 +75,26 @@ function reset() {
         }
     }
 
-    function paddleBounce() {
-        if ((ball.x  <= paddleOne.x + paddleOne.width + ball.r) && (ball.y >= paddleOne.y) && (ball.y  <= paddleOne.y + paddleOne.height)) {
-            ball.velX = -ball.velX;
+    function randomBgC() {
+        let  red = Math.floor(Math.random() * 256)
+        let green = Math.floor(Math.random() * 256)
+        let blue = Math.floor(Math.random() * 256)
+        if ((ball.x  <= paddleOne.x + paddleOne.width + ball.r) && (ball.y >= paddleOne.y + ball.r) && (ball.y  <= paddleOne.y + paddleOne.height - ball.r)) {
+            background.style.backgroundColor = "RGB(" + red + "," + green + "," + blue + ")";
         }
-        if ((ball.x >= paddleTwo.x - paddleTwo.width + 1) && (ball.y >= paddleTwo.y) && (ball.y <= paddleTwo.y + paddleTwo.height)) {
-            ball.velX = -ball.velX;
+        if ((ball.x >= paddleTwo.x - paddleTwo.width + 1) && (ball.y >= paddleTwo.y + ball.r) && (ball.y <= paddleTwo.y + paddleTwo.height - ball.r)) {
+            background.style.backgroundColor = "RGB(" + red + "," + green + "," + blue + ")";
         }
     }
 
-    function movePaddle() {
-        paddleOne.y -= (paddleOne.downVel * paddleTime);
-        paddleOne.y -= (paddleOne.upVel * paddleTime);
-        paddleTwo.y -= (paddleTwo.downVel * paddleTime);
-        paddleTwo.y -= (paddleTwo.upVel * paddleTime);
+    function paddleBounce() {
+
+        if (ball.velX < 0 && (ball.x  <= paddleOne.x + paddleOne.width + ball.r) && (ball.y >= paddleOne.y + ball.r) && (ball.y  <= paddleOne.y + paddleOne.height - ball.r)) {
+            ball.velX = -ball.velX;
+        }
+        if (ball.velX > 0 && (ball.x >= paddleTwo.x - paddleTwo.width + 1) && (ball.y >= paddleTwo.y + ball.r) && (ball.y <= paddleTwo.y + paddleTwo.height - ball.r)) {
+            ball.velX = -ball.velX;
+        }
     }
 
     function drawPaddle(xPos, yPos, width, height) {
@@ -152,6 +104,13 @@ function reset() {
         ctx.stroke();
         ctx.fill();
 
+    }
+
+    function movePaddle() {
+        paddleOne.y -= (paddleOne.downVel * paddleTime);
+        paddleOne.y -= (paddleOne.upVel * paddleTime);
+        paddleTwo.y -= (paddleTwo.downVel * paddleTime);
+        paddleTwo.y -= (paddleTwo.upVel * paddleTime);
     }
 
     function leftPaddleCheck () {
@@ -204,16 +163,65 @@ function reset() {
                 case "ArrowUp":
                     paddleTwo.upVel = 0;
             }
-        })
+        });
     })
-        setInterval(frame, dt);
 
-    // window.addEventListener("mousemove", e => {
-    //     ball.x = e.pageX;
-    //     ball.y = e.pageY;
-    //     clearCanvas();
-    //     drawBall(ball.x, ball.y, ball.r);
-    //     drawPaddle(paddleOne.x, paddleOne.y, paddleOne.width, paddleOne.height);
-    //     drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
-    // });
+    function p1Score() {
+        if (ball.x <  ball.r) {
+            playerOne += 1;
+            document.getElementById("P2score").innerHTML = playerOne;
+        }
+    }
+
+    function p2Score() {
+        if (ball.x > width - ball.r) {
+            playerTwo += 1;
+            document.getElementById("P1score").innerHTML = playerTwo;
+        }
+    }
+
+    function reset() {
+        if (ball.x <= ball.r  || ball.x  >= (width - ball.r)) {
+            ball.x = width/2;
+            ball.y = height/2;
+            if (random(0, 4) === 0) {
+                ball.velX = -ball.velX;
+            } else if (random(0, 4 === 1)) {
+                ball.velY = -ball.velY;
+            } else if (random(0, 4) === 2){
+                ball.velX = -ball.velX;
+                ball.velY = -ball.velX;
+            }
+        }
+    }
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, width, height);
+    }
+
+function ballFrame() {
+    ballPosition();
+    paddleBounce();
+    checkEdgeBounce();
+    drawBall(ball.x, ball.y, ball.r);
+}
+
+function paddleFrame() {
+    movePaddle();
+    leftPaddleCheck();
+    rightPaddleCheck();
+    drawPaddle(paddleOne.x, paddleOne.y, paddleOne.width, paddleOne.height);
+    drawPaddle(paddleTwo.x, paddleTwo.y, paddleTwo.width, paddleTwo.height);
+}
+
+function mainFrame() {
+    clearCanvas();
+    ballFrame();
+    paddleFrame();
+    randomBgC();
+    p1Score();
+    p2Score();
+    reset();
+}
+        setInterval(mainFrame, dt);
 })();
