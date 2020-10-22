@@ -12,8 +12,8 @@
         r: 8,
         x: width / 2,
         y: height / 2,
-        velX: .4,
-        velY: .4,
+        velX: .8,
+        velY: .8,
     };
 
      let paddleOne = {
@@ -51,6 +51,7 @@
     let  red;
     let green;
     let blue;
+    let opacity;
 
     function random(min, max) {
         return Math.floor(Math.random() * (max - min) + min)
@@ -76,14 +77,15 @@ function ballPosition() {
     }
 
     function randomBgC() {
-        let  red = Math.floor(Math.random() * 256)
-        let green = Math.floor(Math.random() * 256)
-        let blue = Math.floor(Math.random() * 256)
+         red = Math.floor(Math.random() * 256);
+         green = Math.floor(Math.random() * 256);
+         blue = Math.floor(Math.random() * 256);
+        opacity = (Math.random() + .1);
         if ((ball.x  <= paddleOne.x + paddleOne.width + ball.r) && (ball.y >= paddleOne.y + ball.r) && (ball.y  <= paddleOne.y + paddleOne.height - ball.r)) {
-            background.style.backgroundColor = "RGB(" + red + "," + green + "," + blue + ")";
+            background.style.backgroundColor = "RGBA(" + red + "," + green + "," + blue + "," + opacity + ")";
         }
         if ((ball.x >= paddleTwo.x - paddleTwo.width + 1) && (ball.y >= paddleTwo.y + ball.r) && (ball.y <= paddleTwo.y + paddleTwo.height - ball.r)) {
-            background.style.backgroundColor = "RGB(" + red + "," + green + "," + blue + ")";
+            background.style.backgroundColor = "RGBA(" + red + "," + green + "," + blue + "," + opacity + ")";
         }
     }
 
