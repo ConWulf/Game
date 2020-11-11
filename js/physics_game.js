@@ -182,6 +182,8 @@ function ballPosition() {
         }
     }
 
+    let ballInterval =  setInterval(mainFrame, dt);
+
     function reset() {
         if (ball.x <= ball.r  || ball.x  >= (width - ball.r)) {
             ball.x = width/2;
@@ -225,5 +227,4 @@ function mainFrame() {
     p2Score();
     reset();
 }
-        setInterval(mainFrame, dt);
 })();
