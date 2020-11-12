@@ -42,4 +42,14 @@ h1 {
     padding: 20px;
 }
 
+.buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.startGame {
+    margin-left: 10px;
+}
+
 

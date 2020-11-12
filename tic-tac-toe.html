@@ -10,25 +10,29 @@
 </head>
 <body>
 
-<div class="wrapper">
+<div class="wrapper" id="tittle">
 	<h1>responsive tic-tac-toe</h1>
 </div>
 
-<main class="wrapper">
+<main class="wrapper" id="boardWrapper">
+
+	<div id="turn"></div>
 <div class="playField" id="board">
-	<div id="squareTl" class="playSquares"></div>
-	<div id="squareTm" class="playSquares"></div>
-	<div id="squareTr" class="playSquares"></div>
-	<div id="squareMl" class="playSquares"></div>
-	<div id="squareM" class="playSquares"></div>
-	<div id="squareMr" class="playSquares"></div>
-	<div id="squareBl" class="playSquares"></div>
-	<div id="squareBm" class="playSquares"></div>
-	<div id="squareBr" class="playSquares"></div>
+	<div id="squareTl" class="playSquares topRow"></div>
+	<div id="squareTm" class="playSquares topRow"></div>
+	<div id="squareTr" class="playSquares topRow"></div>
+	<div id="squareMl" class="playSquares middleRow"></div>
+	<div id="squareM" class="playSquares middleRow"></div>
+	<div id="squareMr" class="playSquares middleRow"></div>
+	<div id="squareBl" class="playSquares bottomRow"></div>
+	<div id="squareBm" class="playSquares bottomRow"></div>
+	<div id="squareBr" class="playSquares bottomRow"></div>
 </div>
 
 	<div class="buttonContainer">
 		<button id="resetButton" class="reset">Reset</button>
+		<button id="2P" class="startGame">Play Against Human</button>
+		<button id="AI" class="startGame">Play Against Computer</button>
 	</div>
 </main>
 
